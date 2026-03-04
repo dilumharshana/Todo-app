@@ -5,7 +5,7 @@ import { STATUS } from '../constants/constants.js';
  * Get all todos
  * route - GET /apitodos
  */
-export const getTodos = async (req, res, next) => {
+export const getAllTodos = async (req, res, next) => {
     try {
         // get todos form db 
         const todos = await Todo.find();
@@ -54,7 +54,7 @@ export const updateTodo = async (req, res, next) => {
     const todo = await Todo.findById(req.params.id);
 
     if (!todo) {
-      res.status(404);
+      res.status(STATUS.NOT_FOUND);
       throw new Error('Task not found');
     }
 
@@ -65,6 +65,58 @@ export const updateTodo = async (req, res, next) => {
     const updatedTodo = await todo.save();
     res.status(STATUS.SUCCESS).json(updatedTodo);
 
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Toggle task completion status
+ * route - PATCH /api/todos/:id/done
+ */
+export const updateTodoIsDone = async (req, res, next) => {
+  try {
+    // get todo by todo id
+    const todo = await Todo.findById(req.params.id);
+
+    if (!todo) {
+      res.status(STATUS.NOT_FOUND);
+      throw new Error('Task not found.');
+    }
+
+    // if todos isDone status is true -> false, false -> true
+    todo.isDone = !todo.isDone;
+    
+    //update todo status
+    const updatedTodo = await todo.save();
+    
+    res.status(STATUS.SUCCESS).json(updatedTodo);
+  } catch (error) {
+    next(error); 
+  }
+};
+
+
+/**
+ * Remove a task from the database
+ * route - DELETE /api/todos/:id
+ */
+export const deleteTodo = async (req, res, next) => {
+  try {
+    const todo = await Todo.findById(req.params.id);
+
+    if (!todo) {
+      res.status(STATUS.NOT_FOUND);
+      throw new Error('Task not found.');
+    }
+
+    // delete todo
+    await todo.deleteOne();
+
+    res.status(STATUS.SUCCESS).json({ 
+      id: req.params.id,
+      message: 'Task successfully removed' 
+    });
   } catch (error) {
     next(error);
   }
