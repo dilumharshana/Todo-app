@@ -7,3 +7,8 @@ export const STATUS = {
   NOT_FOUND: 404,
   SERVER_ERROR: 500,
 };
+
+export const NODE_ENV = {
+  DEVELOPMENT: 'development',
+  PRODUCTION: 'production',
+}
