@@ -1,0 +1,24 @@
+{
+  "name": "todo-app-server",
+  "version": "1.0.0",
+  "description": "todo app back end server",
+  "homepage": "https://github.com/dilumharshana/Todo-app-server#readme",
+  "bugs": {
+    "url": "https://github.com/dilumharshana/Todo-app-server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dilumharshana/Todo-app-server.git"
+  },
+  "license": "ISC",
+  "author": "Dilum Harshana",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1"
+  }
+}
