@@ -3,7 +3,7 @@ import { STATUS } from '../constants/constants.js';
 
 /**
  * Get all todos
- * route - GET /api/v1/todos
+ * route - GET /apitodos
  */
 export const getTodos = async (req, res) => {
     try {
@@ -18,7 +18,7 @@ export const getTodos = async (req, res) => {
 
 /**
  * Create a new todo item
- * route - POST /api/v1//todos
+ * route - POST /api/todos
  */
 export const createTodo = async (req, res) => {
     try {
