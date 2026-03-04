@@ -26,7 +26,7 @@ export const createTodo = async (req, res, next) => {
         // validate todo title and description 
         if (!title) {
             res.status(STATUS.BAD_REQUEST);
-            throw new Error('Please add a title');
+            throw new Error('Title is required');
         }
 
         const todo = new Todo({
@@ -55,7 +55,7 @@ export const updateTodo = async (req, res, next) => {
 
     if (!todo) {
       res.status(STATUS.NOT_FOUND);
-      throw new Error('Task not found');
+      throw new Error('Task not found for given id.');
     }
 
     //update todo
@@ -81,7 +81,7 @@ export const updateTodoIsDone = async (req, res, next) => {
 
     if (!todo) {
       res.status(STATUS.NOT_FOUND);
-      throw new Error('Task not found.');
+      throw new Error('Task not found for given id.');
     }
 
     // if todos isDone status is true -> false, false -> true
@@ -107,7 +107,7 @@ export const deleteTodo = async (req, res, next) => {
 
     if (!todo) {
       res.status(STATUS.NOT_FOUND);
-      throw new Error('Task not found.');
+      throw new Error('Task not found for given id.');
     }
 
     // delete todo

@@ -21,7 +21,17 @@ app.use('/api', appRoutes);
 app.use(errorHandler);
 app.use(logger);
 
-// Start server 
-connectDB().then(() => {
-  app.listen(PORT, () => console.log(`Server is running on ${PORT}`));
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server running in on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error(`Error: Database connection failed! \n${error.message}`);
+    process.exit(1); 
+  }
+};
+
+startServer();

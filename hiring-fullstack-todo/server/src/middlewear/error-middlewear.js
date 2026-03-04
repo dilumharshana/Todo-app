@@ -7,7 +7,7 @@ export const errorHandler = (err, req, res, next) => {
   console.error(`[Error] ${err.message}`);
   
   res.status(statusCode).json({
-    message: err.message,
+    message: 'Something went wrong! Please try again.',
     stack: process.env.NODE_ENV === NODE_ENV.PRODUCTION ? null : err.stack,
   });
 };
