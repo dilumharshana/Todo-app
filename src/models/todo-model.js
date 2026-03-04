@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const todoSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, 'todo title is required'],
+    required: [true, 'Todo title is required'],
     trim: true,
   },
   description: {
@@ -17,4 +17,4 @@ const todoSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-export default todoSchema
+export default mongoose.model('Todo', todoSchema);
