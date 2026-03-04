@@ -1,6 +1,5 @@
 import express from 'express';
-import { getTodos } from '../controllers/todo-controller.js';
-import { createTodo } from '../controllers/todo-controller.js';
+import { getTodos, createTodo, updateTodo } from '../controllers/todo-controller.js';
 
 const router = express.Router();
 
@@ -10,5 +9,6 @@ router.use('/apisystem-health',   async (req, res) => res.status(200).json({'sta
 // todo routes 
 router.get('/todos', getTodos);
 router.post('/todos', createTodo);
+router.put('/todos/:id', updateTodo);
 
 export default router; 

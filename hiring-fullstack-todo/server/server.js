@@ -13,9 +13,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// config routes
+app.use('/api', appRoutes);
+
+// configure middlewears
 app.use(errorHandler);
 app.use(logger);
-app.use('/api', appRoutes);
 
 // Start server 
 connectDB().then(() => {

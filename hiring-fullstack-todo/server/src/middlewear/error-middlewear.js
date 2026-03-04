@@ -1,8 +1,10 @@
-import STATUS, { NODE_ENV } from './../constants/constants.js';
+import {STATUS, NODE_ENV } from './../constants/constants.js';
 
 // middlewear for handle errors
 export const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === STATUS.SUCCESS ? STATUS.SERVER_ERROR : res.statusCode;
+
+  console.error(`[Error] ${err.message}`);
   
   res.status(statusCode).json({
     message: err.message,
