@@ -50,6 +50,7 @@ This project uses a Monorepo structure to manage both the Backend API and the Fr
 
 # Install all dependencies for both apps at once
     ```bash```
+    cd .\hiring-fullstack-todo\
     npm install
 
 # Environment Configuration
