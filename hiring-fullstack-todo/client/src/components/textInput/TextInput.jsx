@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 
 export const TextInput = forwardRef(({ label, error, ...props }, ref) => {
   return (
-    <div className="flex flex-col gap-1 w-full">
+    <div className="flex flex-col gap-1 w-full outline-none transition-all focus:ring-27">
       {label && <label className="text-sm font-semibold text-gray-600 ml-1">{label}</label>}
       <input 
         ref={ref}

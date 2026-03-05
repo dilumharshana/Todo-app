@@ -5,7 +5,8 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
   const { _id, title, description, isDone } = todo;
 
   return (
-    <div className={`flex items-center justify-between p-4 mb-3 border ${
+    <div className={`flex items-center justify-between p-4 mb-3 border rounded-xl transition-all duration-300
+ ${
       isDone ? 'bg-gray-50 border-gray-200' : 'bg-white border-blue-100 shadow-sm hover:shadow-md'
     }`}>
       <div className="flex items-start gap-3 flex-1">
@@ -19,7 +20,7 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
 
         {/* Text Content */}
         <div className="flex flex-col">
-          <h3 className={`font-semibold text-lg leading-tight ${isDone ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+          <h3 className={`font-semibold text-lg leading-tight ${isDone ? 'line-through text-red-500' : 'text-blue-600'}`}>
             {title}
           </h3>
           {description && (
@@ -31,7 +32,7 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-1 ml-4">
+      <div className="flex gap-1 ml-4 ">
         <Button variant="ghost" onClick={() => onEdit(todo)} className="p-2  hover:bg-blue-50">
           <Edit3 size={18} />
         </Button>
