@@ -37,7 +37,7 @@ const EmptyState = ({ onAction }) => (
  */
 export const TodoListContainer = memo(({
   openEditModal,
-  openCreateModal // Ensure this is passed in as a prop
+  openCreateModal
 }) => {
 
   const { todos, isLoading, toggleTodo, deleteTodo } = useTodo();
@@ -51,7 +51,7 @@ export const TodoListContainer = memo(({
   // 3. Render List
   return (
     <main className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="divide-y divide-gray-50">
           {todos.map((todo) => (
             <TodoItem

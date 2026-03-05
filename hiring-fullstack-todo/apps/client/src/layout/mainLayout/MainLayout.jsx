@@ -8,7 +8,7 @@ import { TodoForm } from '../../components/todoForm/TodoForm';
 
 const MainLayoutContent = () => {
     const { todos, openEditModal } = useTodo(); // We'll use our new hook
-    const [isModalOpen,] = useState(false);
+    const [isModalOpen,setIsModalOpen] = useState(false);
     const [editingTodo, setEditingTodo] = useState(null);
 
     const openCreateModal = () => {
@@ -24,7 +24,7 @@ const MainLayoutContent = () => {
     return (
         <div className="max-w-2xl mx-auto m-6">
             <TodoAppHeader numberOfTodos={todos.length} onAddClick={openCreateModal} />
-            <TodoListContainer onEdit={openEditModal} />
+            <TodoListContainer onEdit={openEditModal} openCreateModal={openCreateModal} />
 
             <Modal
                 isOpen={isModalOpen}

@@ -1,17 +1,8 @@
 import { CheckCircle2, Circle, Trash2, Edit3, Calendar, Clock } from 'lucide-react';
+import { formatDate } from '../../utils/fomatters/fomatters';
 
 const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
   const { _id, title, description, isDone, createdAt } = todo;
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   return (
     <div 
