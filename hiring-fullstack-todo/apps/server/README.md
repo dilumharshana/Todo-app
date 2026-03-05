@@ -1,4 +1,4 @@
-# Todo App - Backend API
+# 🚀 Todo App - Backend API
 ---
 
 ## Tech Stack
@@ -18,22 +18,18 @@
 
 ## Setup & Installation
 
-1. **Navigate to the backend directory:**
-   ```bash
-   ```cd hiring-fullstack-todo/server```
-
-2. **Install dependencies:**
-   ```bash
+1. **Install dependencies:**
+   ```bash```
     npm install
 
-3. **Configure Environment Variables:**
+2. **Configure Environment Variables:**
     PORT=3300
     MONGO_URI=your_mongodb_atlas_connection_string
     NODE_ENV=development
 
-4. **Start the server:**
-     ```bash
-        npm run dev 
+3. **Start the server:**
+     ```bash``
+    npm run dev 
 
 ---
 
