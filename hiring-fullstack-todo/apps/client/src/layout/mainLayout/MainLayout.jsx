@@ -1,18 +1,22 @@
 import { useState } from 'react';
-import { TodoProvider } from '../../context/TodoContext';
-import { useTodo } from '../../customHooks/useTodo';
-import { TodoAppHeader } from '../../components/todoAppHeader/TodoAppHeader';
-import { TodoListContainer } from '../../components/todoListContainer/TodoListContainer';
 import Modal from '../../components/modal/Modal';
+import { TodoAppHeader } from '../../components/todoAppHeader/TodoAppHeader';
 import { TodoForm } from '../../components/todoForm/TodoForm';
+import { TodoListContainer } from '../../components/todoListContainer/TodoListContainer';
+import { TodoProvider } from '../../context/TodoContext';
+import { Toaster } from 'react-hot-toast';
 
 const MainLayoutContent = () => {
-    const { todos, openEditModal } = useTodo(); // We'll use our new hook
     const [isModalOpen,setIsModalOpen] = useState(false);
     const [editingTodo, setEditingTodo] = useState(null);
 
     const openCreateModal = () => {
         setEditingTodo(null);
+        setIsModalOpen(true);
+    };
+
+    const openEditModal = (todo) => {
+        setEditingTodo(todo);
         setIsModalOpen(true);
     };
 
@@ -23,7 +27,8 @@ const MainLayoutContent = () => {
 
     return (
         <div className="max-w-2xl mx-auto m-6">
-            <TodoAppHeader numberOfTodos={todos.length} onAddClick={openCreateModal} />
+            <Toaster position="top-right" />
+            <TodoAppHeader onAddClick={openCreateModal} />
             <TodoListContainer onEdit={openEditModal} openCreateModal={openCreateModal} />
 
             <Modal

@@ -1,8 +1,11 @@
 import React, { memo } from 'react';
 import { ListTodo, Plus } from 'lucide-react';
+import { useTodo } from '../../customHooks/useTodo';
 
-// We wrap the component in memo()
-export const TodoAppHeader = memo(({ numberOfTodos, onAddClick }) => {
+export const TodoAppHeader = memo(({ onAddClick }) => {
+  
+  const { todos } = useTodo();
+
   return (
     <header className="flex items-center justify-between mb-10">
       <div className="flex items-center gap-3">
@@ -14,7 +17,7 @@ export const TodoAppHeader = memo(({ numberOfTodos, onAddClick }) => {
             MY TASKS
           </h1>
           <p className="text-sm text-gray-500 mt-1 font-medium">
-            {numberOfTodos} {numberOfTodos === 1 ? 'item' : 'items'} total
+            {todos?.length} {todos?.length === 1 ? 'item' : 'items'} total
           </p>
         </div>
       </div>

@@ -50,12 +50,11 @@ This project uses a Monorepo structure to manage both the Backend API and the Fr
 
 # Install all dependencies for both apps at once
     ```bash```
-    cd .\hiring-fullstack-todo\
     npm install
 
 # Environment Configuration
 
-**Backend (apps/api/.env)**
+**Backend (apps/server/.env)**
 
     1. Create a .env file in the apps/api folder and add bellow variables with your value:
 
@@ -63,7 +62,7 @@ This project uses a Monorepo structure to manage both the Backend API and the Fr
     MONGO_URI=your_mongodb_atlas_connection_string
     NODE_ENV=development
 
-**Frontend (apps/web/.env)**
+**Frontend (apps/client/.env)**
 
     1. Create a .env file in the apps/api folder and add bellow variables with your value:
 
@@ -78,7 +77,7 @@ This project uses a Monorepo structure to manage both the Backend API and the Fr
 **You can start both the Frontend and Backend simultaneously with a single command from the root folder:**
 
     ```bash``
-    npm install
+    npm start
 
 *Frontend: http://localhost:5173
 *Backend API: http://localhost:5000/api/todos

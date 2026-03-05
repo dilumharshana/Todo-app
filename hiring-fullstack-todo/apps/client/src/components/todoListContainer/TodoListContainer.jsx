@@ -36,7 +36,7 @@ const EmptyState = ({ onAction }) => (
  ** Main Container
  */
 export const TodoListContainer = memo(({
-  openEditModal,
+  onEdit,
   openCreateModal
 }) => {
 
@@ -59,7 +59,7 @@ export const TodoListContainer = memo(({
               todo={todo}
               onToggle={toggleTodo}
               onDelete={deleteTodo}
-              onEdit={openEditModal}
+              onEdit={onEdit}
             />
           ))}
         </div>
