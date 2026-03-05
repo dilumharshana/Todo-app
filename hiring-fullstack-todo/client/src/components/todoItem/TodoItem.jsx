@@ -1,44 +1,59 @@
-import { CheckCircle, Circle, Trash2, Edit3 } from 'lucide-react';
-import { Button } from '../button/Button';
+import { CheckCircle2, Circle, Trash2, Edit3 } from 'lucide-react';
 
 const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
   const { _id, title, description, isDone } = todo;
 
   return (
-    <div className={`flex items-center justify-between p-4 mb-3 border rounded-xl transition-all duration-300
- ${
-      isDone ? 'bg-gray-50 border-gray-200' : 'bg-white border-blue-100 shadow-sm hover:shadow-md'
-    }`}>
-      <div className="flex items-start gap-3 flex-1">
-        {/* Toggle Button */}
+    <div 
+      className={`group flex items-center justify-between p-5 transition-all duration-200 
+      ${isDone ? 'bg-gray-50/50' : 'bg-white hover:bg-emerald-50/30'}`}
+    >
+      <div className="flex items-start gap-4 flex-1 min-w-0">
+
         <button 
           onClick={() => onToggle(_id)}
-          className={`mt-1 transition-colors ${isDone ? 'text-green500' : 'text-gray-400 hover:text-blue-500'}`}
+          className={`mt-0.5 transition-all duration-200 transform active:scale-90 flex-shrink-0
+          ${isDone ? 'text-emerald-500' : 'text-gray-300 hover:text-emerald-400'}`}
         >
-          {isDone ? <CheckCircle size={22} fill="currentColor" className="text-white" /> : <Circle size={22} />}
+          {isDone ? (
+            <CheckCircle2 size={24} className="fill-emerald-50" />
+          ) : (
+            <Circle size={24} strokeWidth={1.5} />
+          )}
         </button>
 
         {/* Text Content */}
-        <div className="flex flex-col">
-          <h3 className={`font-semibold text-lg leading-tight ${isDone ? 'line-through text-red-500' : 'text-blue-600'}`}>
+        <div className="flex flex-col truncate">
+          <h3 className={`font-medium text-[16px] leading-snug transition-all duration-300 truncate
+            ${isDone ? 'line-through text-gray-400' : 'text-gray-800'}`}>
             {title}
           </h3>
           {description && (
-            <p className={`text-sm mt-1 ${isDone ? 'text-gray-300' : 'text-gray-500'}`}>
+            <p className={`text-sm mt-0.5 truncate transition-all duration-300
+              ${isDone ? 'text-gray-300' : 'text-gray-500'}`}>
               {description}
             </p>
           )}
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex gap-1 ml-4 ">
-        <Button variant="ghost" onClick={() => onEdit(todo)} className="p-2  hover:bg-blue-50">
+
+      <div className="flex items-center gap-1 ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <button 
+          onClick={() => onEdit(todo)} 
+          className="p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+          title="Edit Task"
+          disabled={isDone} 
+        >
           <Edit3 size={18} />
-        </Button>
-        <Button variant="ghost" onClick={() => onDelete(_id)} className="p-2 hover:bg-red-50">
+        </button>
+        <button 
+          onClick={() => onDelete(_id)} 
+          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          title="Delete Task"
+        >
           <Trash2 size={18} />
-        </Button>
+        </button>
       </div>
     </div>
   );

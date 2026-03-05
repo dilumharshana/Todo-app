@@ -1,126 +1,168 @@
 import { useState, useEffect } from 'react';
-import { Loader2, LayoutList } from 'lucide-react';
+import { Loader2, ListTodo, Plus } from 'lucide-react';
+import toast, { Toaster } from 'react-hot-toast';
 import TodoForm from './components/todoForm/TodoForm';
 import TodoItem from './components/TodoItem/TodoItem';
+import Modal from './components/modal/Modal'; // The modal we discussed
 import { todoService } from './services/todoServices';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [editingTodo, setEditingTodo] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 1. Initial Fetch
+  // get all todos 
   useEffect(() => {
     fetchTodos();
   }, []);
 
+  // fetch todos from back end 
   const fetchTodos = async () => {
     try {
       const { data } = await todoService.getAll();
       setTodos(data);
     } catch (err) {
-      alert("Failed to load tasks. Is the backend running?");
+      toast.error("Couldn't sync with the server. Please check your connection.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 2. Create or Update Logic
+  // create new todo and update existing todo
   const handleSaveTodo = async (formData) => {
     setIsSubmitting(true);
     try {
       if (editingTodo) {
         const { data } = await todoService.update(editingTodo._id, formData);
-        setTodos(todos.map(t => t._id === data._id ? data : t));
-        setEditingTodo(null);
+        setTodos(prev => prev.map(t => t._id === data._id ? data : t));
       } else {
         const { data } = await todoService.create(formData);
-        setTodos([data, ...todos]); // Add new one to top
+        setTodos(prev => [data, ...prev]);
       }
+      closeModal();
     } catch (err) {
-      console.error(err);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // 3. Toggle Done (Optimistic UI)
+  // change task isDone status 
   const handleToggle = async (id) => {
-    // Senior move: Update UI immediately, then sync with DB
     const originalTodos = [...todos];
     setTodos(todos.map(t => t._id === id ? { ...t, isDone: !t.isDone } : t));
 
     try {
       await todoService.toggleDone(id);
     } catch (err) {
-      setTodos(originalTodos); // Rollback on error
+      setTodos(originalTodos);
+      toast.error("Failed to update status.");
     }
   };
 
-  // 4. Delete Logic
+  // delete todo 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure?")) return;
+    if (!confirm("Are you sure you want to delete this?")) return;
+    
     try {
       await todoService.delete(id);
-      setTodos(todos.filter(t => t._id !== id));
+      setTodos(prev => prev.filter(t => t._id !== id));
+      toast.success("Task removed");
     } catch (err) {
-      console.error(err);
+      toast.error("Could not delete task.");
     }
+  };
+
+  const openCreateModal = () => {
+    setEditingTodo(null);
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (todo) => {
+    setEditingTodo(todo);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditingTodo(null);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
-        
-        {/* Left Side: Form Section */}
-        <div className="md:col-span-5">
-          <div className="sticky top-8">
-            <TodoForm 
-              onSubmit={handleSaveTodo} 
-              initialData={editingTodo} 
-              isLoading={isSubmitting} 
-            />
+    <div className="min-h-screen bg-slate-50 py-12 px-4 selection:bg-emerald-100">
+      <Toaster position="top-right" />
+      
+      <div className="max-w-2xl mx-auto">
+        {/* Header Section */}
+        <header className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-emerald-600 rounded-xl shadow-lg shadow-emerald-200">
+              <ListTodo className="text-white" size={24} />
+            </div>
+            <div>
+              <h1 className="text-2xl font-black text-gray-900 tracking-tight leading-none">MY TASKS</h1>
+              <p className="text-sm text-gray-500 mt-1 font-medium">{todos.length} items total</p>
+            </div>
           </div>
-        </div>
 
-        {/* Right Side: List Section */}
-        <div className="md:col-span-7">
-          <header className="flex items-center gap-2 mb-6">
-            <LayoutList className="text-blue-600" size={28} />
-            <h1 className="text-2xl font-black text-gray-800 tracking-tight">MY TASKS</h1>
-            <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">
-              {todos.length}
-            </span>
-          </header>
+          <button 
+            onClick={openCreateModal}
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md shadow-emerald-100 hover:shadow-emerald-200 active:scale-95"
+          >
+            <Plus size={20} />
+            <span>New Task</span>
+          </button>
+        </header>
 
+        {/* List Section */}
+        <main>
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-              <Loader2 className="animate-spin mb-2" size={32} />
-              <p>Fetching your tasks...</p>
+              <Loader2 className="animate-spin mb-3 text-emerald-500" size={40} />
+              <p className="font-medium">Loading your workflow...</p>
             </div>
           ) : todos.length === 0 ? (
-            <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
-              <p className="text-gray-500 font-medium">No tasks found. Start by adding one!</p>
+            <div className="text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-200">
+              <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ListTodo className="text-gray-300" size={32} />
+              </div>
+              <p className="text-gray-500 font-medium">Your task list is empty</p>
+              <button onClick={openCreateModal} className="text-emerald-600 font-bold mt-2 hover:underline">
+                Create your first task
+              </button>
             </div>
           ) : (
-            <div className="space-y-1">
-              {todos.map(todo => (
-                <TodoItem 
-                  key={todo._id} 
-                  todo={todo} 
-                  onToggle={handleToggle} 
-                  onDelete={handleDelete}
-                  onEdit={(t) => {
-                    setEditingTodo(t);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                />
-              ))}
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="divide-y divide-gray-50">
+                {todos.map(todo => (
+                  <TodoItem 
+                    key={todo._id} 
+                    todo={todo} 
+                    onToggle={handleToggle} 
+                    onDelete={handleDelete}
+                    onEdit={openEditModal}
+                  />
+                ))}
+              </div>
             </div>
           )}
-        </div>
+        </main>
       </div>
+
+      {/* Modern Modal for the Form */}
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+        title={editingTodo ? 'Update Task' : 'New Task'}
+      >
+        <TodoForm 
+          onSubmit={handleSaveTodo} 
+          onCancel={closeModal}
+          initialData={editingTodo} 
+          isLoading={isSubmitting} 
+        />
+      </Modal>
     </div>
   );
 };

@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import { todoSchema } from '../../utils/validations/validations';
 import { TextInput } from '../textInput/TextInput';
 import { Button } from '../button/Button';
+import toast from 'react-hot-toast'; // Assuming you use react-hot-toast or similar
 
-const TodoForm = ({ onSubmit, initialData = null, isLoading = false }) => {
-  // Initialize Hook Form
+const TodoForm = ({ onSubmit, onCancel, initialData = null, isLoading = false }) => {
   const {
     register,
     handleSubmit,
@@ -17,56 +17,73 @@ const TodoForm = ({ onSubmit, initialData = null, isLoading = false }) => {
     defaultValues: { title: '', description: '' }
   });
 
-  // Sync form switch to "Edit Mode"
   useEffect(() => {
     if (initialData) {
       reset({
         title: initialData.title,
         description: initialData.description || '',
       });
+    } else {
+      reset({ title: '', description: '' });
     }
   }, [initialData, reset]);
 
-  const handleFormSubmit = (data) => {
-    onSubmit(data);
+  const handleFormSubmit = async (data) => {
+    try {
+      await onSubmit(data);
+      toast.success(initialData ? 'Task updated successfully' : 'Task created successfully');
+      if (!initialData) reset();
+    } catch (error) {
+      toast.error('Something went wrong. Please try again.');
+    }
+  };
 
-    // Clear form after adding new task
-    if (!initialData) reset(); 
+  const handleCancel = () => {
+    // Explicitly reset to empty or initial without triggering validation
+    reset({ title: '', description: '' }, { keepDefaultValues: false });
+    onCancel();
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit(handleFormSubmit)} 
-      className="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm space-y-4"
-    >
-      <h2 className="text-xl font-bold text-gray-800">
-        {initialData ? 'Edit Task' : 'Create Task'}
-      </h2>
-      
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
       <TextInput 
-        label="Title"
-        placeholder="What needs to be done?"
+        label="Task Title"
+        placeholder="e.g. Design system update"
         error={errors.title?.message}
         {...register('title')} 
       />
 
       <TextInput 
         label="Description"
-        placeholder="Add details (optional)"
+        placeholder="Briefly describe the objective..."
         error={errors.description?.message}
         {...register('description')}
       />
 
-      <div className="flex gap-2">
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? 'Saving...' : initialData ? 'Save Changes' : 'Add Task'}
+      <div className="flex items-center gap-3 pt-2">
+        <Button 
+          type="button" 
+          variant="secondary" 
+          onClick={handleCancel}
+          className="flex-1 bg-gray-50 text-gray-600 hover:bg-gray-100 border-none"
+        >
+          Cancel
         </Button>
         
-        {initialData && (
-          <Button variant="secondary" onClick={() => reset({ title: '', description: '' })}>
-            Cancel
-          </Button>
-        )}
+        <Button 
+          type="submit" 
+          disabled={isLoading}
+          className="flex-[2] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-200 transition-all active:scale-[0.98]"
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span>Saving...</span>
+            </div>
+          ) : (
+            initialData ? 'Update Task' : 'Create Task'
+          )}
+        </Button>
       </div>
     </form>
   );
