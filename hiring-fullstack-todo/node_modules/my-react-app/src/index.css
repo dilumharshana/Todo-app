@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* That's it! Tailwind v4 automatically detects your files. */
+/* You can add your custom theme variables here if needed: */
+@theme {
+  --color-brand: #3b82f6;
+}
