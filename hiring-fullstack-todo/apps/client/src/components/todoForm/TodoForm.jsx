@@ -33,11 +33,9 @@ export const TodoForm = ({ onCancel, initialData = null }) => {
   }, [initialData, reset]);
 
   const handleFormSubmit = async (data) => {
-    // saveTodo returns true on success (as defined in our Provider)
     const success = await saveTodo(data, initialData?._id);
 
     if (success) {
-      // We don't need toast here anymore because the Provider handles it!
       if (!initialData) reset();
       onCancel(); // Close the modal
     }
